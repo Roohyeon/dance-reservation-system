@@ -1,0 +1,55 @@
+/* 레이어 순서: montage(리셋 · 색 변수) 가 가장 약하고 → Tailwind 클래스가 이겨요
+   (Montage global.css 를 레이어 없이 넣으면 nav { display:block } 같은 리셋이
+    Tailwind 의 flex · padding · border 클래스를 덮어써서 배치가 깨져요) */
+@layer montage, theme, base, components, utilities;
+@import "@montage-ui/core/global.css" layer(montage);
+@import "tailwindcss";
+
+/* 색은 Montage 토큰(CSS 변수)을 그대로 이름만 짧게 — Tailwind 는 배치 · 간격 위주로 */
+@theme {
+  --font-sans: "Pretendard JP", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+
+  --color-brand: var(--semantic-foreground-brand-primary);
+  --color-brand-subtle: var(--semantic-surface-brand-subtle);
+  --color-fg: var(--semantic-foreground-neutral-primary);
+  --color-fg-2: var(--semantic-foreground-neutral-secondary);
+  --color-fg-3: var(--semantic-foreground-neutral-tertiary);
+  --color-line: var(--semantic-line-neutral-primary);
+  --color-line-2: var(--semantic-line-neutral-secondary);
+  --color-bg: var(--semantic-background-neutral-primary);
+  --color-bg-2: var(--semantic-background-neutral-secondary);
+  --color-surface: var(--semantic-surface-neutral-secondary);
+
+  /* 페이드업: 아래에서 위로 서서히 나타나기 (홈 히어로) → 클래스 animate-fade-up */
+  --animate-fade-up: fade-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s both;
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@layer base {
+  /* 숫자칸의 브라우저 기본 ▲▼ 숨기기 (인원칸은 Montage 버튼으로 대신해요) */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  body {
+    background: var(--semantic-background-neutral-secondary);
+    color: var(--semantic-foreground-neutral-primary);
+    font-family: var(--font-sans);
+    word-break: keep-all;
+  }
+}
